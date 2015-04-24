@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Toolshare</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{STATIC_URL}}dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../static/home/css/business-casual.css" rel="stylesheet">
+	  <link href="../static/mytools/mytools.css" rel="stylesheet">
+	
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+    <script type="text/javascript" src="../static/js/jquery-ui.js"></script>
+    <script type="text/javascript" src="../static/js/jquery.js"></script>
+    <script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
+
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+  <script src="../static/js/jquery.js"></script>
+  <script src="../static/js/jquery-ui.js"></script>
+  <link rel="stylesheet" href="../static/jquery-ui.css"></link>
+  </head>
+  
+    <div class="navbar navbar-default">
+      <div  class="container">
+        <ul class="nav navbar-nav">
+          <li><a href="../home">ToolShare</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+             <span class="glyphicon glyphicon-envelope"></span> Messages
+
+             <b class="caret"></b>
+         </a>
+         <ul class="dropdown-menu">
+            <li>
+            <a href="/messages/write/">
+                    <span class="glyphicon glyphicon-edit"></span> Write a Message
+                </a>
+            </li>
+            <li>
+                <a href="/messages/inbox/">
+                    <span class="glyphicon glyphicon-inbox"></span> Inbox 
+
+                </a>
+            </li>
+            <li>
+                <a href="/messages/archives/">
+                    <span class="glyphicon glyphicon-folder-open"></span> Archives
+                </a>
+            </li>
+            <li>
+                <a href="/messages/sent/">
+                    <span class="glyphicon glyphicon-send"></span> Sent Messages
+                </a>
+            </li>
+            <li>
+                <a href="/messages/trash/">
+                    <span class="glyphicon glyphicon-trash"></span> Trash
+                </a>
+            </li>
+            </ul>
+            </li>
+          <li><a href="../myprofile">My Profile</a></li>
+          <li><a href="../mytools">My Tools</a></li>
+          <li><a href="../mysheds">Sheds</a></li>
+          <li><a href="../about">About</a></li>
+          <li><a href="../contact">Contact Us</a></li>
+          <li><a href="/logout">Logout</a></li>
+        </ul>
+        </div>
+    </div>
+
+
+	
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+        	<ul><a></a></ul>
+          <ul class="nav nav-sidebar">
+		    <h3><span class="label label-primary">My Tools</span></h3>
+		    <a class="btn btn-success" data-toggle="modal" href="#register">Register a new Tool</a>
+        <a class="btn btn-primary" data-toggle="modal" href="#search">Search for Tools</a>
+       
+        <div class="modal fade" id="register" title="Register New Tool" aria-labelledby="dialog" aria-hidden="true" role="dialog">
+             <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3><span class="label label-primary label-">Register a new Tool!</span></h3>
+                    <p></p>
+                    <form method="POST">{%csrf_token%}
+                    {{form.as_p}}  
+                    <p></p>
+                    <input class="btn btn-success" type="submit"></input>
+                    </form>
+                  </div>
+                </div>
+              </div>        
+        </div>
+
+
+<div class="modal fade" id="search" aria-labelledby="dialog" aria-hidden="true"role="dialog">
+   <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><span class="label label-primary"> Search by Name</span></h3>
+        <p></p>
+        <form method="GET" action="{% url 'searchTools' %}">
+          <input type="text" name="q" />
+          <input class="btn btn-success" type="submit"/>
+        </form>
+      </div>
+    </div>
+  </div>        
+</div>
+
+          	<!--<h4><span class="label label-danger">In Shed</span></h4>-->
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"></div>
+
+		<table class="table">
+    <tr>
+    <th>Tool</th>
+    <th>Location</th> 
+    <th></th>
+    </tr>
+		{%for tool in ownedTools%}
+			<tr>
+      <td><a class="btn btn-primary btn-xs" data-toggle="modal" href="#info">{{tool.name}}</a></td>
+      <td>{{tool.shed}}</td>
+      <td><a class='btn btn-danger btn-xs' type="submit" href="{% url 'deleteTool' tool_id=tool.id %}">Delete</a></td>
+      </tr>
+      <div class="modal fade" id="info" aria-labelledby="dialog" aria-hidden="true" role="dialog">
+             <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3><span class="label label-primary label-">{{tool.name}} info</span></h3>
+                    <p></p>
+                    <p>Condition: 
+                    {%if tool.toolCondition == 1%}
+                        ★☆☆☆☆
+                    {%else%}
+                        {% if tool.toolCondition == 2 %}
+                            ★★☆☆☆
+                        {%else%}
+                            {%if tool.toolCondition == 3 %}
+                                ★★★☆☆
+                            {%else%}
+                                {%if tool.toolCondition == 4%}
+                                    ★★★★☆
+                                {%else%}
+                                    {%if tool.toolCondition == 5%}
+                                        ★★★★★
+                                        {%endif%}
+                                        {%endif%}
+                                        {%endif%}
+                                        {%endif%}
+                                        {%endif%}
+                                        
+                    </p>
+                    <p>Description: {{tool.description}}</p>
+                    <p>Owner: {{tool.owner.first_name}} {{tool.owner.last_name}}</p>
+                    <p>Shed: {{tool.shed}}</p>
+                    <a class="btn btn-success" href="{% url "editTool" tool_id=tool.id %}">Edit {{tool.name}}</a>
+                    <p></p>
+                  </div>
+                </div>
+              </div>        
+        </div>
+		{%endfor%}
+		</table>
+    <h3><span class="label label-primary">Currently Borrowing</span></h3>
+
+    <form>
+    {%for x in borrowedTools%}
+    <div>
+    {{x.name}}
+
+    <a class='btn btn-warning btn-xs' type="submit" href="{% url "returnTool" tool_id=x.id %}">Return
+    </a>
+
+     
+    </div>
+    {%endfor%}
+    </form>
+
+	<div class="container">
+      {% if messages %}
+	  <div class='row'>
+	    <div class='col-sm-4'>
+			{% for message in messages %}
+			<li class="{{ message.tags }}">
+			  {% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}
+			</li>
+			{% endfor %}
+	    </div>
+	  </div>
+	  {% endif %}
+	</div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

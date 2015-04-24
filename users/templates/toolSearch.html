@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="../../favicon.ico">
+
+  <title>Toolshare</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="../static/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="../static/home/css/business-casual.css" rel="stylesheet">
+
+  <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+  <script type="text/javascript" src="../static/js/jquery-ui.js"></script>
+  <script type="text/javascript" src="../static/js/jquery.js"></script>
+  <script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
+</script>
+</script>
+</script>
+</script>
+</head>
+
+<div class="navbar navbar-default">
+  <div  class="container">
+    <ul class="nav navbar-nav">
+      <li><a href="../home">ToolShare</a></li>
+      <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+             <span class="glyphicon glyphicon-envelope"></span> Messages
+
+             <b class="caret"></b>
+         </a>
+         <ul class="dropdown-menu">
+            <li>
+            <a href="/messages/write/">
+                    <span class="glyphicon glyphicon-edit"></span> Write a Message
+                </a>
+            </li>
+            <li>
+                <a href="/messages/inbox/">
+                    <span class="glyphicon glyphicon-inbox"></span> Inbox 
+
+                </a>
+            </li>
+            <li>
+                <a href="/messages/archives/">
+                    <span class="glyphicon glyphicon-folder-open"></span> Archives
+                </a>
+            </li>
+            <li>
+                <a href="/messages/sent/">
+                    <span class="glyphicon glyphicon-send"></span> Sent Messages
+                </a>
+            </li>
+            <li>
+                <a href="/messages/trash/">
+                    <span class="glyphicon glyphicon-trash"></span> Trash
+                </a>
+            </li>
+            </ul>
+            </li>
+      <li><a href="../myprofile">My Profile</a></li>
+      <li><a href="../mytools">My Tools</a></li>
+      <li><a href="../mysheds">Sheds</a></li>
+      <li><a href="../about">About</a></li>
+      <li><a href="../contact">Contact Us</a></li>
+      <li><a href="/logout">Logout</a></li>
+    </ul>
+  </div>
+</div>
+
+<h2>Search results for {{query}}</h2>
+
+<div>
+  <table class="table" style="width:25%">
+    <tr>
+      <th>Tool</th>
+    </tr>
+    {% for x in results %}
+    <tr>
+      <td>
+        <a class="btn btn-primary" data-toggle="modal" href="#info">{{x.name}}</a>
+      </td>
+      {%if x.shed == profile.shed%}
+      <td>
+        <a class="btn btn-success" href="{% url "requestTool" tool_id=x.id %}">Borrow</a>
+
+      </td>
+      {%else%}
+      {%endif%}
+    </tr>
+
+    <div class="modal fade" id="info" aria-labelledby="dialog" aria-hidden="true"role="dialog">
+     <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><span class="label label-primary"> {{x.name}}</span></h3>
+          <p>Condition: 
+                    {%if x.toolCondition == 1%}
+                        ★☆☆☆☆
+                    {%else%}
+                        {% if x.toolCondition == 2 %}
+                            ★★☆☆☆
+                        {%else%}
+                            {%if tool.toolCondition == 3 %}
+                                ★★★☆☆
+                            {%else%}
+                                {%if tool.toolCondition == 4%}
+                                    ★★★★☆
+                                {%else%}
+                                    {%if tool.toolCondition == 5%}
+                                        ★★★★★
+                                        {%endif%}
+                                        {%endif%}
+                                        {%endif%}
+                                        {%endif%}
+                                        {%endif%}
+                                        
+                    </p>
+                    <p>Description: {{x.description}}</p>
+                    <p>Owner: {{x.owner.first_name}} {{x.owner.last_name}}</p>
+                    <p>Shed: {{x.shed}}</p>
+                    <p>Shed Location: {{x.shed.location}}</p>
+        </div>
+      </div>
+    </div>        
+  </div>
+  {%endfor%}
+</table>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="../../dist/js/bootstrap.min.js"></script>

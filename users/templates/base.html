@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+{% load postman_tags %}
+{% postman_unread as unread_count %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <title>Toolshare</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ STATIC_URL }}dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{{ STATIC_URL }}home/css/business-casual.css" rel="stylesheet">
+
+   
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  
+    <div class="navbar navbar-default">
+      <div  class="container">
+        <ul class="nav navbar-nav">
+          <li><a href="{% url "home" %}">ToolShare</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+             <span class="glyphicon glyphicon-envelope"></span> Messages
+
+             <b class="caret"></b>
+         </a>
+         <ul class="dropdown-menu">
+            <li>
+            <a href="/messages/write/">
+                    <span class="glyphicon glyphicon-edit"></span> Write a Message
+                </a>
+            </li>
+            <li>
+                <a href="/messages/inbox/">
+                    <span class="glyphicon glyphicon-inbox"></span> Inbox 
+
+                </a>
+            </li>
+            <li>
+                <a href="/messages/archives/">
+                    <span class="glyphicon glyphicon-folder-open"></span> Archives
+                </a>
+            </li>
+            <li>
+                <a href="/messages/sent/">
+                    <span class="glyphicon glyphicon-send"></span> Sent Messages
+                </a>
+            </li>
+            <li>
+                <a href="/messages/trash/">
+                    <span class="glyphicon glyphicon-trash"></span> Trash
+                </a>
+            </li>
+            </ul>
+            </li>
+          <li><a href="{% url "myprofile" %}">My Profile</a></li>
+          <li><a href="{% url "mytools" %}">My Tools</a></li>
+          <li><a href="{% url "mysheds" %}">Sheds</a></li>
+          <li><a href="{% url "about" %}">About</a></li>
+          <li><a href="{% url "contact" %}">Contact Us</a></li>
+          <li><a href="{% url "logout" %}">Logout</a></li>
+        </ul>
+        </div>
+    </div>
+    
+    {% block content %}
+    {% endblock content %}
+    {% block script %}
+    {% endblock script %}
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+	<!-- jQuery -->
+    <script src="../../dist/js/jquery.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    </html>

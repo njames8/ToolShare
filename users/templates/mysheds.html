@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="../../favicon.ico">
+
+  <title>Toolshare</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="{{STATIC_URL}}dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="../static/home/css/business-casual.css" rel="stylesheet">
+
+  <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+  <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+  <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+  <script type="text/javascript" src="../static/js/jquery-ui.js"></script>
+  <script type="text/javascript" src="../static/js/jquery.js"></script>
+  <script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
+
+
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+      <![endif]-->
+    </head>
+
+    <div class="navbar navbar-default">
+      <div  class="container">
+        <ul class="nav navbar-nav">
+          <li><a href="../home">ToolShare</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+             <span class="glyphicon glyphicon-envelope"></span> Messages
+
+             <b class="caret"></b>
+         </a>
+         <ul class="dropdown-menu">
+            <li>
+            <a href="/messages/write/">
+                    <span class="glyphicon glyphicon-edit"></span> Write a Message
+                </a>
+            </li>
+            <li>
+                <a href="/messages/inbox/">
+                    <span class="glyphicon glyphicon-inbox"></span> Inbox 
+
+                </a>
+            </li>
+            <li>
+                <a href="/messages/archives/">
+                    <span class="glyphicon glyphicon-folder-open"></span> Archives
+                </a>
+            </li>
+            <li>
+                <a href="/messages/sent/">
+                    <span class="glyphicon glyphicon-send"></span> Sent Messages
+                </a>
+            </li>
+            <li>
+                <a href="/messages/trash/">
+                    <span class="glyphicon glyphicon-trash"></span> Trash
+                </a>
+            </li>
+            </ul>
+            </li>
+          <li><a href="../myprofile">My Profile</a></li>
+          <li><a href="../mytools">My Tools</a></li>
+          <li><a href="../mysheds">Sheds</a></li>
+          <li><a href="../about">About</a></li>
+          <li><a href="../contact">Contact Us</a></li>
+          <li><a href="/logout">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="shedBtns">
+      <h3><span class="label label-success">Sheds near {{profile.location}}</span></h3>
+      <a class="btn btn-primary" href="{% url 'myprofile' %}">Change Location</a>
+      <a class="btn btn-primary" data-toggle="modal" href="#search">Search for Sheds</a>
+    <a class="btn btn-primary" data-toggle="modal" href="#register">Create Shed</a>
+    </div>
+
+    <p></p>
+    <p></p>
+
+    <div class="modal fade" id="register" aria-labelledby="dialog" aria-hidden="true" role="dialog">
+     <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><span class="label label-primary">Register a new Shed!</span></h3>
+          <p></p>
+          <form method="POST">{%csrf_token%}
+            {{form.as_p}}  
+            <p></p>
+            <input class="btn btn-success" type="submit"></input>
+          </form>
+        </div>
+      </div>
+    </div>        
+  </div>
+
+  <div class="modal fade" id="search" aria-labelledby="dialog" aria-hidden="true"role="dialog">
+   <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><span class="label label-primary"> Search by Zipcode</span></h3>
+        <p></p>
+        <form method="GET" action="{% url 'search' %}">
+          <input type="text" name="q" />
+          <input class="btn btn-success" type="submit"/>
+        </form>
+      </div>
+    </div>
+  </div>        
+</div>
+
+
+<div>
+  {%for x in sheds%}
+
+  <a class='btn btn-warning' type="submit" href="{% url "changeShed" shed_id=x.id %}">{{x.name}}</a>
+
+  {%endfor%}
+</div>
+<div>
+  {%if shed == None%}
+  <h3><span class="label label-danger">You are not part of a shed yet!</span></h3>
+  {%else%}
+  <h3><span class="label label-success">Tools in {{shed}}</span></h3>
+</div>
+<div>
+
+  <table class="table" style="width:25%">
+    <tr>
+      <th>Tool</th>
+      <th></th>
+    </tr>
+    {%for tool in tools%}
+    <tr>
+      <td><a class="btn btn-primary btn-xs" data-toggle="modal" href='#info'>{{tool.name}}</a></td>
+      <td><a class ='btn btn-success btn-xs' type="submit"  href="{% url 'requestTool' tool_id=tool.id %}">Request</a></td>
+    </tr>
+    <div class="modal fade" id="info" aria-labelledby="dialog" aria-hidden="true" role="dialog">
+     <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><span class="label label-primary label-">{{tool.name}} info</span></h3>
+          <p></p>
+          <p>Condition: 
+            {%if tool.toolCondition == 1%}
+            ★☆☆☆☆
+            {%else%}
+            {% if tool.toolCondition == 2 %}
+            ★★☆☆☆
+            {%else%}
+            {%if tool.toolCondition == 3 %}
+            ★★★☆☆
+            {%else%}
+            {%if tool.toolCondition == 4 %}
+            ★★★★☆
+            {%else%}
+            {%if tool.toolCondition == 5 %}
+            ★★★★★
+            {%endif%}
+            {%endif%}
+            {%endif%}
+            {%endif%}
+            {%endif%}
+
+          </p>
+          <p>Description: {{tool.description}}</p>
+          <p>Owner: {{tool.owner.first_name}} {{tool.owner.last_name}}</p>
+          <p></p>
+        </div>
+      </div>
+    </div>        
+  </div>
+  {%endfor%}
+  {%endif%}
+</table>
+</div>
+
+{%if user.coordinator == False%}
+<h3><span class="label label-danger">You are not a coordinator of any sheds yet!</span></h3>
+{%else%}
+<h3><span class="label label-success">Coordinated Sheds</span></h3>
+
+<div>
+
+ <table class="table" style="width:25%">
+  <tr>
+    <th>Shed</th>
+    <th></th>
+  </tr>
+  {%for x in coordSheds%}
+  <tr>
+    <td>{{x.name}}</td>
+    <td><a class="btn btn-danger btn-xs" href="{% url "deleteShed" shed_id=x.id %}">Delete</a></td>
+  </tr>
+
+  {%endfor%}
+  {%endif%}
+</table>
+</div>
+
+
+  <!-- <center><img src="../../static/home/ww.gif" alt="Wacky Waving Inflatable Arm Flailing Tube Man" style="width:500px;height:325px"></center>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+  </html>
